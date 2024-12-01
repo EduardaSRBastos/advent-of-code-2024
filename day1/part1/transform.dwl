@@ -9,4 +9,4 @@ var rightOrdered = payload.column_3 orderBy ((item) -> item)
 var distances = leftOrdered map ((item, index) -> 
                         abs(item - rightOrdered[index]))
 ---
-"Total Distance: ": sum(distances default [])
+"Total Distance": sum(distances default [])

@@ -1,9 +1,11 @@
-# advent-of-code-2024
-Advent of Code 2024 ([adventofcode.com](https://adventofcode.com/)) - Dataweave
+# Advent of Code 2024
+[Advent of Code 2024](https://adventofcode.com/) - Dataweave Edition
 
 ## Day 1
 
 ### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos%2Fadvent-of-code-2024&path=day1%2Fpart1">Dataweave Playground<a>
 
 <details>
   <summary>Script</summary>
@@ -21,6 +23,3 @@ var distances = leftOrdered map ((item, index) ->
 "Total Distance: ": sum(distances default [])
 ```
 </details>
-
-<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos%2Fadvent-of-code-2024&path=day1%2Fpart1">Dataweave Playground<a>
-
