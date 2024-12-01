@@ -23,3 +23,26 @@ var distances = leftOrdered map ((item, index) ->
 "Total Distance: ": sum(distances default [])
 ```
 </details>
+
+### Part 2
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos%2Fadvent-of-code-2024&path=day1%2Fpart2">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+input payload application/csv separator=" ", header=false
+import * from dw::core::Arrays
+output application/json
+
+var left = payload.column_0
+var right = payload.column_3
+
+var similarity = left map ((item) -> 
+                    (right countBy ($ ~= item) default 0) * item)
+---
+"Similarity Score": sum(similarity default [])
+```
+</details>
