@@ -12,10 +12,13 @@ Advent of Code 2024 ([adventofcode.com](https://adventofcode.com/)) - Dataweave
 %dw 2.0
 input payload application/csv separator=" ", header=false
 output application/json
-var a = payload.column_0 orderBy $
-var b = payload.column_3 orderBy $
+
+var leftOrdered = payload.column_0 orderBy ((item) -> item)
+var rightOrdered = payload.column_3 orderBy ((item) -> item)
+var distances = leftOrdered map ((item, index) -> 
+                        abs(item - rightOrdered[index]))
 ---
-(0 to sizeOf(a)-1) map (abs(a[$] - b[$])) then sum($)
+"Total Distance: ": sum(distances default [])
 ```
 </details>
 
