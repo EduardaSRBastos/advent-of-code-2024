@@ -1,7 +1,7 @@
 # Advent of Code 2024
-[Advent of Code 2024](https://adventofcode.com/) - Dataweave Edition
+[Advent of Code 2024](https://adventofcode.com/2024) - Dataweave Edition
 
-## Day 1
+## ⭐Day 1
 
 ### Part 1
 
@@ -20,7 +20,7 @@ var rightOrdered = payload.column_3 orderBy ((item) -> item)
 var distances = leftOrdered map ((item, index) -> 
                         abs(item - rightOrdered[index]))
 ---
-"Total Distance: ": sum(distances default [])
+"Total Distance": sum(distances default [])
 ```
 </details>
 
