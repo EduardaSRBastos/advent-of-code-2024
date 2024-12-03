@@ -123,7 +123,7 @@ var safeReports = reports filter ((report) ->
 
 ### Part 1
 
-<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos%2Fadvent-of-code-2024&path=day3%2Fpart1">Dataweave Playground<a>
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day3/part1">Dataweave Playground<a>
 
 <details>
   <summary>Script</summary>
@@ -142,7 +142,7 @@ Results: sum(multiplication)
 
 ### Part 2
 
-<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos%2Fadvent-of-code-2024&path=day3%2Fpart2">Dataweave Playground<a>
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day3/part2">Dataweave Playground<a>
 
 <details>
   <summary>Script</summary>
