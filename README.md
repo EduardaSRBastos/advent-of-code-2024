@@ -1,6 +1,12 @@
 # Advent of Code 2024
 [Advent of Code 2024](https://adventofcode.com/2024) - Dataweave Edition
 
+## Table of Contents
+
+| Day 1 | Day 2 | Day 3 |
+|------|------|------|
+| <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> |
+
 <br>
 
 ## ⭐Day 1
