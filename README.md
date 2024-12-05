@@ -1,11 +1,14 @@
-# Advent of Code 2024
-[Advent of Code 2024](https://adventofcode.com/2024) - Dataweave Edition
+<div align="center">
+
+# [Advent of Code 2024](https://adventofcode.com/2024) - Dataweave Edition
+
+</div>
 
 ## Table of Contents
 
-| Day 1 | Day 2 | Day 3 |
-|------|------|------|
-| <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> |
+| Day 1 | Day 2 | Day 3 | Day 4 |
+|------|------|------|------|
+| <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> |
 
 <br>
 
@@ -178,4 +181,106 @@ var result = matches reduce ((item, accumulator = { result: 0, enabled: true }) 
 ---
 Results: result.result
 ```
+</details
+
+<br>
+
+## ⭐Day 4
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day4/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+input payload application/csv separator="\n", header=false
+import every from dw::core::Arrays
+output application/json
+
+var words = ["XMAS", "SAMX"]
+var data = flatten(payload map ((item) -> item pluck ((value) -> value)))
+
+var columns = (0 to sizeOf(data[0]) - 1) as Array map ((index) -> 
+    data map ((row) -> row[index] as String) joinBy "")
+
+fun findMatches(line) =
+    words flatMap ((word) -> 
+        (0 to sizeOf(line) - sizeOf(word)) filter ((i) -> line[i to i + sizeOf(word) - 1] == word) map ((i) -> word))
+
+fun isDiagonalMatch(row, col, word) =
+    (0 to sizeOf(word) - 1) every ((i) -> data[row + i][col + i] == word[i])
+
+fun findDiagonalMatches() =
+    words flatMap ((word) -> 
+        (0 to sizeOf(data) - sizeOf(word)) flatMap ((row) -> 
+            (0 to sizeOf(data[row]) - sizeOf(word)) filter ((col) ->
+                isDiagonalMatch(row, col, word)
+            ) map ((i) -> word)
+        )
+    )
+
+fun isDiagonalReverseMatch(row, col, word) =
+    (0 to sizeOf(word) - 1) every ((i) -> data[row + i][col - i] == word[i])
+
+fun findReverseDiagonalMatches() =
+    words flatMap ((word) ->
+        (0 to sizeOf(data) - sizeOf(word)) flatMap ((row) -> 
+            (0 to sizeOf(data[row]) - 1) filter ((col) ->
+                (col - sizeOf(word) >= -1) and 
+                (row + sizeOf(word) <= sizeOf(data)) and 
+                isDiagonalReverseMatch(row, col, word)
+            ) map ((i) -> word)
+        )
+    )
+
+var horizontal = flatten(data map ((row) -> findMatches(row)))
+var vertical = flatten(columns map ((col) -> findMatches(col)))
+var diagonal = findDiagonalMatches()
+var reverseDiagonal = findReverseDiagonalMatches()
+---
+total: (sizeOf(horizontal) + sizeOf(vertical) + sizeOf(diagonal) + sizeOf(reverseDiagonal))
+```
 </details>
+
+### Part 2
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day4/part2">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+input payload application/csv separator="\n", header=false
+output application/json
+
+var data = flatten(payload map ((item) -> item pluck ((value) -> value)))
+var size = sizeOf(data)
+
+fun isXMasPattern(x, y) =
+  (data[x+1][y+1] == 'A' and
+    (
+      (data[x][y] == 'M' and data[x+2][y+2] == 'S') or
+      (data[x][y] == 'S' and data[x+2][y+2] == 'M')
+    ) and
+    (
+      (data[x][y+2] == 'M' and data[x+2][y] == 'S') or
+      (data[x][y+2] == 'S' and data[x+2][y] == 'M')
+    ))
+
+var matches = flatten(
+  (0 to size - 1) as Array map (i) -> 
+    (0 to sizeOf(data[i]) - 1)
+      map (j) -> if (isXMasPattern(i, j)) { x: i, y: j } else null
+) filter($ != null)
+---
+total: sizeOf(matches)
+```
+</details
+
+<br>
+
+‎<h2 align="right">[▲](#advent-of-code-2024---dataweave-edition)</h2>
