@@ -6,9 +6,9 @@
 
 ## Table of Contents
 
-| Day 1 | Day 2 | Day 3 | Day 4 |
-|------|------|------|------|
-| <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> |
+| Day 1 | Day 2 | Day 3 | Day 4 | Day 5 |
+|------|------|------|------|------|
+| <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> | <p align="center">[⭐](#day-5)</p> |
 
 <br>
 
@@ -280,6 +280,39 @@ var matches = flatten(
 total: sizeOf(matches)
 ```
 </details
+
+<br>
+
+## ⭐Day 5
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day5/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+import every from dw::core::Arrays
+output application/json
+
+var rules = (payload splitBy "\n\n")[0] splitBy "\n" map ((rule) -> rule splitBy "|")
+var updates = (payload splitBy "\n\n")[1] splitBy "\n" map ((updateItem) -> updateItem splitBy ",")
+var middleValues = updates 
+    filter ((updateItem) -> 
+        rules 
+            filter ((pair) -> 
+                (updateItem contains pair[0]) and (updateItem contains pair[1])
+            )
+            every ((pair) -> 
+                (updateItem indexOf pair[0]) < (updateItem indexOf pair[1])
+            )
+    ) 
+    map ((updateItem) -> updateItem[sizeOf(updateItem) / 2] as Number)
+---
+sum: sum(middleValues)
+```
+</details>
 
 <br>
 
