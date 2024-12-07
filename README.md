@@ -10,6 +10,10 @@
 |------|------|------|------|------|
 | <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> | <p align="center">[⭐](#day-5)</p> |
 
+| Day 6 | Day 7 |
+|------|------|
+| <p align="center">[⭐](#day-6)</p> | <p align="center">[⭐](#day-7)</p> |
+
 <br>
 
 ## ⭐Day 1
@@ -293,6 +297,7 @@ total: sizeOf(matches)
   <summary>Script</summary>
 
 ```dataweave
+%dw 2.0
 import every from dw::core::Arrays
 output application/json
 
@@ -311,6 +316,105 @@ var middleValues = updates
     map ((updateItem) -> updateItem[sizeOf(updateItem) / 2] as Number)
 ---
 sum: sum(middleValues)
+```
+</details>
+
+<br>
+
+## ⭐Day 7
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day7/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json
+
+var data = payload 
+    splitBy("\n")
+    map ((line) -> {
+        total: (line splitBy ":")[0] as Number,
+        numbers: trim((line splitBy ":")[1])
+            splitBy(" ") 
+            map ((num) -> num as Number)
+    })
+
+var results = (nums) -> 
+    do {
+        var calculate = (pos, acc) -> 
+            if (pos == sizeOf(nums)) acc
+            else
+                flatten(
+                    [
+                        calculate(pos + 1, acc map ((value) -> value + nums[pos])),
+                        calculate(pos + 1, acc map ((value) -> value * nums[pos]))
+                    ]
+                )
+        ---
+        calculate(1, [nums[0]])
+    }
+
+var totalResults = data map ((item) -> 
+    if (results(item.numbers) contains item.total)
+        item.total
+    else
+        0
+)
+---
+total: sum(totalResults filter ($ != 0))
+```
+</details>
+
+### Part 2
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day7/part2">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json
+
+var data = payload 
+    splitBy("\n")
+    map ((line) -> {
+        total: (line splitBy ":")[0] as Number,
+        numbers: trim((line splitBy ":")[1])
+            splitBy(" ") 
+            map ((num) -> num as Number)
+    })
+
+var results = (nums) -> 
+    do {
+        var calculate = (pos, acc) -> 
+            if (pos == sizeOf(nums)) acc
+            else
+                flatten(
+                    [
+                        calculate(pos + 1, acc map ((value) -> value + nums[pos])),
+                        calculate(pos + 1, acc map ((value) -> value * nums[pos])),
+                        calculate(pos + 1, acc map ((value) ->
+                            ((value as String) ++ (nums[pos] as String)) as Number
+                        ))
+                    ]
+                )
+        ---
+        calculate(1, [nums[0]])
+    }
+
+var totalResults = data map ((item) -> 
+    if (results(item.numbers) contains item.total)
+        item.total
+    else
+        0
+)
+---
+total: sum(totalResults filter ($ != 0))
 ```
 </details>
 
