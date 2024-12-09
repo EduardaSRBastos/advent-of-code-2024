@@ -471,7 +471,6 @@ var antinodes = flatten(
         antinode.x >= 0 and antinode.x < sizeOf(cells) and 
         antinode.y >= 0 and antinode.y < sizeOf(cells[0])
     )  distinctBy ($)
-
 ---
   total: sizeOf(antinodes)
 ```
@@ -483,6 +482,8 @@ var antinodes = flatten(
 
 <details>
   <summary>Script</summary>
+  
+```dataweave
 %dw 2.0
 import some from dw::core::Arrays
 output application/json
@@ -548,8 +549,6 @@ var grid =
   //map: grid,
   total: sizeOf(antinodes)
 }
-```dataweave
-
 ```
 </details>
 
