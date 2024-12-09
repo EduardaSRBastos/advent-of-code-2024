@@ -7,12 +7,10 @@
 ## Table of Contents
 
 | Day 1 | Day 2 | Day 3 | Day 4 | Day 5 |
-|------|------|------|------|------|
+|-------|-------|-------|-------|-------|
 | <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> | <p align="center">[⭐](#day-5)</p> |
-
-| Day 6 | Day 7 |
-|------|------|
-| <p align="center">[⭐](#day-6)</p> | <p align="center">[⭐](#day-7)</p> |
+|  | **Day 7** | **Day 8** |  |  |
+|  | <p align="center">[⭐](#day-7)</p> | <p align="center">[⭐](#day-8)</p> |  |  |
 
 <br>
 
@@ -415,6 +413,143 @@ var totalResults = data map ((item) ->
 )
 ---
 total: sum(totalResults filter ($ != 0))
+```
+</details>
+
+<br>
+
+## ⭐Day 8
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day8/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import some from dw::core::Arrays
+output application/json
+
+var rows = payload replace "\r\n" with "\n" splitBy "\n"
+var cells = rows map ((row) -> row splitBy "")
+
+var frequencies = flatten(
+    rows map (
+        (row, rowIndex) ->
+            row splitBy "" 
+                map (
+                    (cell, cellIndex) ->
+                        if (cell != ".") 
+                            { x: rowIndex, y: cellIndex, frequency: cell }
+                        else null
+                ) filter ($ != null)
+    )
+) groupBy $.frequency
+
+var antinodes = flatten(
+    frequencies pluck ((antennas, frequency) -> 
+        antennas 
+            flatMap ((antenna1, idx1) -> 
+                antennas[(idx1 + 1) to -1] 
+                    flatMap ((antenna2) -> 
+                        do {
+                            var dx = antenna2.x - antenna1.x
+                            var dy = antenna2.y - antenna1.y
+                            ---
+                            [
+                                { x: antenna1.x - dx, y: antenna1.y - dy },
+                                { x: antenna2.x + dx, y: antenna2.y + dy }
+                            ] 
+                        }
+                    )
+            )
+    )
+) filter ((antinode) -> 
+        antinode != null and 
+        antinode.x >= 0 and antinode.x < sizeOf(cells) and 
+        antinode.y >= 0 and antinode.y < sizeOf(cells[0])
+    )  distinctBy ($)
+
+---
+  total: sizeOf(antinodes)
+```
+</details>
+
+### Part 2
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day8/part2">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+%dw 2.0
+import some from dw::core::Arrays
+output application/json
+
+var rows = payload replace "\r\n" with "\n" splitBy "\n"
+var cells = rows map ((row) -> row splitBy "")
+
+var frequencies = flatten(
+    rows map (
+        (row, rowIndex) ->
+            row splitBy "" 
+                map (
+                    (cell, cellIndex) ->
+                        if (cell != ".") 
+                            { x: rowIndex, y: cellIndex, frequency: cell }
+                        else null
+                ) filter ($ != null)
+    )
+) groupBy $.frequency
+
+var antinodes = flatten(
+    frequencies pluck ((antennas, frequency) -> 
+        antennas 
+            flatMap ((antenna1, idx1) -> 
+                antennas[(idx1 + 1) to -1] 
+                    flatMap ((antenna2) -> 
+                        do {
+                            var dx = antenna2.x - antenna1.x
+                            var dy = antenna2.y - antenna1.y
+                            ---
+                            flatten(
+                                [
+                                    (0 to sizeOf(cells)) map ((step) -> { 
+                                        x: antenna1.x - step * dx, 
+                                        y: antenna1.y - step * dy 
+                                    }),
+                                    (0 to sizeOf(cells)) map ((step) -> { 
+                                        x: antenna2.x + step * dx, 
+                                        y: antenna2.y + step * dy 
+                                    })
+                                ]
+                            )
+                        }
+                    )
+            )
+    )
+) filter ((antinode) -> 
+        antinode != null and 
+        antinode.x >= 0 and antinode.x < sizeOf(cells) and 
+        antinode.y >= 0 and antinode.y < sizeOf(cells[0])
+    )  distinctBy ($)
+
+var grid = 
+    cells map ((row, rowIndex) -> 
+        row map ((cell, cellIndex) -> 
+            if (cell != "." ) cell
+            else if (antinodes some (antinode) -> antinode.x == rowIndex and antinode.y == cellIndex) "#" 
+            else "."
+        ) joinBy ""
+    )
+---
+{
+  //map: grid,
+  total: sizeOf(antinodes)
+}
+```dataweave
+
 ```
 </details>
 
