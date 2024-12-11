@@ -9,8 +9,8 @@
 | Day 1 | Day 2 | Day 3 | Day 4 | Day 5 |
 |-------|-------|-------|-------|-------|
 | <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> | <p align="center">[⭐](#day-5)</p> |
-|  | **Day 7** | **Day 8** |  |  |
-|  | <p align="center">[⭐](#day-7)</p> | <p align="center">[⭐](#day-8)</p> |  |  |
+|  | **Day 7** | **Day 8** |  | **Day 10** |
+|  | <p align="center">[⭐](#day-7)</p> | <p align="center">[⭐](#day-8)</p> |  | <p align="center">[⭐](#day-10)</p> |
 
 <br>
 
@@ -482,7 +482,7 @@ var antinodes = flatten(
 
 <details>
   <summary>Script</summary>
-  
+
 ```dataweave
 %dw 2.0
 import some from dw::core::Arrays
@@ -546,9 +546,97 @@ var grid =
     )
 ---
 {
-  //map: grid,
   total: sizeOf(antinodes)
 }
+```
+</details>
+
+<br>
+
+## ⭐Day 10
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day10/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import * from dw::core::Arrays
+output application/json
+
+var data = payload replace "\r\n" with "\n" splitBy "\n" map((line) -> 
+    line splitBy "" map ((item) -> item as Number))
+
+var trailhead = data flatMap ((line, x) -> 
+    line flatMap ((item, y) -> 
+        if (item == 0) [{x: x, y: y}] else []))
+
+var trails = (data, x, y, currentNumber) ->
+    if (data[x][y] == 9) 
+        [{x: x, y: y}]
+    else do {
+        var directions = [
+            {x: x - 1, y: y},
+            {x: x + 1, y: y},
+            {x: x, y: y - 1},
+            {x: x, y: y + 1}]
+        ---
+        directions flatMap ((pos) -> 
+            if (pos.x >= 0 and pos.x < sizeOf(data) and 
+            pos.y >= 0 and pos.y < sizeOf(data[0]) and 
+            data[pos.x][pos.y] == currentNumber + 1) 
+                trails(data, pos.x, pos.y, currentNumber + 1) 
+            else [])}
+    distinctBy $
+---
+sum: sum(trailhead map ((trail) -> 
+    sizeOf(trails(data, trail.x, trail.y, 0))
+))
+```
+</details>
+
+### Part 2
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day10/part2">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import * from dw::core::Arrays
+output application/json
+
+var data = payload replace "\r\n" with "\n" splitBy "\n" map((line) -> 
+    line splitBy "" map ((item) -> item as Number))
+
+var trailhead = data flatMap ((line, x) -> 
+    line flatMap ((item, y) -> 
+        if (item == 0) [{x: x, y: y}] else []))
+
+var trails = (data, x, y, currentNumber) ->
+    if (data[x][y] == 9) 
+        [{x: x, y: y}]
+    else do {
+        var directions = [
+            {x: x - 1, y: y},
+            {x: x + 1, y: y},
+            {x: x, y: y - 1},
+            {x: x, y: y + 1}]
+        ---
+        directions flatMap ((pos) -> 
+            if (pos.x >= 0 and pos.x < sizeOf(data) and 
+            pos.y >= 0 and pos.y < sizeOf(data[0]) and 
+            data[pos.x][pos.y] == currentNumber + 1) 
+                trails(data, pos.x, pos.y, currentNumber + 1) 
+            else [])}
+---
+sum: sum(trailhead map ((trail) -> 
+    sizeOf(trails(data, trail.x, trail.y, 0))
+))
 ```
 </details>
 
