@@ -564,7 +564,6 @@ var grid =
 
 ```dataweave
 %dw 2.0
-import * from dw::core::Arrays
 output application/json
 
 var data = payload replace "\r\n" with "\n" splitBy "\n" map((line) -> 
@@ -607,7 +606,6 @@ sum: sum(trailhead map ((trail) ->
 
 ```dataweave
 %dw 2.0
-import * from dw::core::Arrays
 output application/json
 
 var data = payload replace "\r\n" with "\n" splitBy "\n" map((line) -> 

@@ -1,7 +1,6 @@
 //https://adventofcode.com/2024/day/10
 
 %dw 2.0
-import * from dw::core::Arrays
 output application/json
 
 var data = payload replace "\r\n" with "\n" splitBy "\n" map((line) -> 
