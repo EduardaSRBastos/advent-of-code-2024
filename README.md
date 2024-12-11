@@ -11,6 +11,8 @@
 | <p align="center">[⭐](#day-1)</p> | <p align="center">[⭐](#day-2)</p> | <p align="center">[⭐](#day-3)</p> | <p align="center">[⭐](#day-4)</p> | <p align="center">[⭐](#day-5)</p> |
 |  | **Day 7** | **Day 8** |  | **Day 10** |
 |  | <p align="center">[⭐](#day-7)</p> | <p align="center">[⭐](#day-8)</p> |  | <p align="center">[⭐](#day-10)</p> |
+| **Day 11** |  |  |  |  |
+| <p align="center">[⭐](#day-11)</p> |  |  |  |  |
 
 <br>
 
@@ -635,6 +637,42 @@ var trails = (data, x, y, currentNumber) ->
 sum: sum(trailhead map ((trail) -> 
     sizeOf(trails(data, trail.x, trail.y, 0))
 ))
+```
+</details>
+
+<br>
+
+## ⭐Day 11
+
+### Part 1
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=EduardaSRBastos/advent-of-code-2024&path=day11/part1">Dataweave Playground<a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json
+
+var data = payload replace "\r\n" with "\n" splitBy " "
+
+var blinkings = (data, times) ->
+    if (times ~= 0) 
+        data
+    else
+        blinkings(
+            flatten(data map ((item) -> 
+                if(item as Number == 0)
+                    1 
+                else if((sizeOf(item) mod 2) == 0) do {
+                    var mid = sizeOf(item) / 2
+                    ---
+                    [item[0 to mid -1] as Number, item[mid to -1] as Number]}
+                else item as Number * 2024)), 
+            times - 1)
+---
+"Number of Stones": sizeOf(blinkings(data, 25))
 ```
 </details>
 
